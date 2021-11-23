@@ -5,12 +5,12 @@ const dotenv = require("dotenv");
 const { body, validationResult } = require('express-validator');
 const userRoutes = require('./src/routes/auth');
 const userSchema = require('./src/models/auth')
-
+const dataBase = require('./src/database/db');
 dotenv.config()
 
-mongoose.connect(process.env.MONGODB_URL, {})
-  .then(() => console.log('Database connected!'))
-  .catch(() => console.error('Database error'))
+// mongoose.connect(process.env.MONGODB_URL, {})
+//   .then(() => console.log('Database connected!'))
+//   .catch(() => console.error('Database error'))
 
 
 app.use(express.json());
@@ -23,7 +23,7 @@ app.get('/', (req, res) =>{
 
 app.use('/api', userRoutes);
 app.use('/api', userSchema);
-
+app.use('/', dataBase);
     
 
 

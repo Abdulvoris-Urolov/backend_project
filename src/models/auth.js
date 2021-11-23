@@ -61,46 +61,5 @@ function validateUser(user) {
   return schema.validate(user);
 }
 
-// async function getSalt() {
-//   const salt = await bcrypt.genSalt();
-//   const password = "12345";
-//   const pwdHash = await bcrypt.hash(password, salt);
-//   // console.log(salt);
-//   // console.log(pwdHash);
-// }
-
-// getSalt()
-// module.exports = validateUser;
 module.exports = User;
 
-// const mongoose = require("mongoose");
-
-//     const UserSchema = new mongoose.Schema({
-//         username:{
-//             type:String,
-//             required:true,
-//             unique:true
-//         },
-//         lastname:{
-//             type:String,
-//             required:true,
-//             unique:true
-//         },
-//         email:{
-//             type:String,
-//             required:true,
-//             unique:true
-//         },
-//         password:{
-//             type:String,
-//             required:true
-//         },
-//         phonenumber:{
-//             type:Number,
-//             required:true
-//         }
-//     },
-//       { timestamps:true }
-// );
-
-// module.exports = mongoose.model("User", UserSchema);
