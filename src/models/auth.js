@@ -1,9 +1,8 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
 const Joi = require('joi');
 
 
-const userSchema = new mongoose.Schema({
+module.exports = new mongoose.Schema({
   firstName:{
     type: String,
     required: true,
@@ -45,8 +44,6 @@ const userSchema = new mongoose.Schema({
   // timestamps: true
 })
 
-const User = mongoose.model('User', userSchema);
-
 function validateUser(user) {
   const schema = Joi.object({
     firstName: Joi.string().min(3).max(20).required(),
@@ -57,9 +54,7 @@ function validateUser(user) {
     role: Joi.string().boolean().required(),
     // timestamps: Joi.boolean().required()
   });
-
   return schema.validate(user);
 }
 
-module.exports = User;
-
+exports.validate = validateUser;
