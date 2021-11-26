@@ -1,4 +1,11 @@
 const express = require("express");
+const bcrypt = require('bcrypt');
+
+// async function getSalt(){
+//   const salt = await bcrypt.genSalt();
+//   console.log(salt);
+// }
+// getSalt();
 const router = express.Router();
 const Joi = require("joi");
 const { User } = require('../models/auth');
@@ -19,6 +26,7 @@ router.post("/users", async (req, res) => {
     let user = await User.findOne({ email: req.body.email });
     if (user) 
       return res.status(400).send("Bu email oldin ro`yxatdan o`tgan");
+
   } catch (error) {
     console.error('2 error')
   }
@@ -34,10 +42,15 @@ router.post("/users", async (req, res) => {
     console.error('3 error')
   }
   try {
-    await newUser.save();
-    res.send(newUser);
+
+    list = new User(req.body, ['firstName', 'lastName', 'userName', 'email', 'password']);
+    const salt = await bcrypt.genSalt();
+    list.password = await bcrypt.hash(list.password, salt);
+
+    await list.save();
+    res.send(list);
   } catch (error) {
-    console.error('4 error')
+    console.error(error.message)
   }
 
 });
