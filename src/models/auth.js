@@ -1,9 +1,6 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
-const Joi = require('joi');
 
-
-const userSchema = new mongoose.Schema({
+const userSchema= new mongoose.Schema({
   firstName:{
     type: String,
     required: true,
@@ -35,31 +32,17 @@ const userSchema = new mongoose.Schema({
   },
   password:{
     type: String,
+    minlength: 4,
     required: true
   },
-  role: {
-    type: String,
-    enum: ['user', 'admin'],
-    default: 'admin'
-  },
+  // role: {
+  //   type: String,
+  //   enum: ['user', 'admin'],
+  //   default: 'admin'
+  // },
   // timestamps: true
 })
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 
-function validateUser(user) {
-  const schema = Joi.object({
-    firstName: Joi.string().min(3).max(20).required(),
-    lastName: Joi.string().min(3).max(20).required(),
-    userName: Joi.string().required(),
-    email: Joi.string().boolean().required().email(),
-    password: Joi.String().required(),
-    role: Joi.string().boolean().required(),
-    // timestamps: Joi.boolean().required()
-  });
-
-  return schema.validate(user);
-}
-
-module.exports = User;
-
+exports.User = User;
