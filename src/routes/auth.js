@@ -1,11 +1,5 @@
 const express = require("express");
 const bcrypt = require('bcrypt');
-
-// async function getSalt(){
-//   const salt = await bcrypt.genSalt();
-//   console.log(salt);
-// }
-// getSalt();
 const router = express.Router();
 const Joi = require("joi");
 const { User } = require('../models/auth');

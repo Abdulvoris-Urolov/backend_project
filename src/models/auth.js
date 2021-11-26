@@ -41,7 +41,11 @@ const userSchema= new mongoose.Schema({
   //   default: 'admin'
   // },
   // timestamps: true
-})
+  
+});
+
+
+// let 
 
 const User = mongoose.model("User", userSchema);
 
