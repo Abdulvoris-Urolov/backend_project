@@ -1,55 +1,9 @@
-// const express = require("express");
-// const router = express.Router();
-// const validate = require('../models/auth')
-
-// router.get("/all", async (req, res) => {
-//   try {
-
-//       res.status(200).json(user);
-//   } catch (err) {
-//       res.status(500).json(err);
-//   }
-// });
-
-// router.get("/:id", async (req, res) => {
-//   try {
-
-//       res.status(200).json(user);
-//   } catch (err) {
-//       res.status(500).json(err);
-//   }
-// });
-
-
-// router.put("/:id", async (req, res) => {
-//   try {
-
-//       res.status(200).json(user);
-//   } catch (err) {
-//       res.status(500).json(err);
-//   }
-// });
-
-// router.delete("/:id", async (req, res) => {
-//   try {
-
-//       res.status(200).json(user);
-//   } catch (err) {
-//       res.status(500).json(err);
-//   }
-// });
-
-// module.exports = router; 
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
 const Joi = require("joi");
+const { User } = require('../models/auth');
 
-const userSchema = require('../models/auth');
-
-// const User = mongoose.model("User", userSchema);
-
-router.post("/api/users", async (req, res) => {
+router.post("/users", async (req, res) => {
  
   const {error} = validateUser(req.body);
   
@@ -70,9 +24,11 @@ router.post("/api/users", async (req, res) => {
   }
   try {
     newUser = new User({
-      name: req.body.name,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      userName: req.body.userName,
+      email: req.body.email,
       password: req.body.password,
-      email: req.body.email
     });
   } catch (error) {
     console.error(error.message)
@@ -88,11 +44,14 @@ router.post("/api/users", async (req, res) => {
 
 function validateUser(user) {
   const userSchema = Joi.object({
-    name: Joi.string().required(),
-    password: Joi.string().min(4).required(),
-    email: Joi.string().required()
+    firstName: Joi.string().min(3).max(20).required(),
+    lastName: Joi.string().min(3).max(20).required(),
+    userName: Joi.string().required(),
+    email: Joi.string().required().email(),
+    password: Joi.string().required()
+    // role: Joi.string().boolean().required(),
+    // timestamps: Joi.boolean().required()
   });
-
   return userSchema.validate(user);
 }
 
