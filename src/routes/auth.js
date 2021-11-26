@@ -20,7 +20,7 @@ router.post("/users", async (req, res) => {
     if (user) 
       return res.status(400).send("Bu email oldin ro`yxatdan o`tgan");
   } catch (error) {
-    console.error(error.message)
+    console.error('2 error')
   }
   try {
     newUser = new User({
@@ -31,28 +31,33 @@ router.post("/users", async (req, res) => {
       password: req.body.password,
     });
   } catch (error) {
-    console.error(error.message)
+    console.error('3 error')
   }
   try {
     await newUser.save();
     res.send(newUser);
   } catch (error) {
-    console.error(error.message)
+    console.error('4 error')
   }
 
 });
 
 function validateUser(user) {
-  const userSchema = Joi.object({
-    firstName: Joi.string().min(3).max(20).required(),
-    lastName: Joi.string().min(3).max(20).required(),
-    userName: Joi.string().required(),
-    email: Joi.string().required().email(),
-    password: Joi.string().required()
-    // role: Joi.string().boolean().required(),
-    // timestamps: Joi.boolean().required()
-  });
-  return userSchema.validate(user);
+  try {
+    const userSchema = Joi.object({
+      firstName: Joi.string().min(3).max(20).required(),
+      lastName: Joi.string().min(3).max(20).required(),
+      userName: Joi.string().required(),
+      email: Joi.string().required().email(),
+      password: Joi.string().min(4).required()
+      // role: Joi.string().boolean().required(),
+      // timestamps: Joi.boolean().required()
+    });
+    return userSchema.validate(user);
+  } catch (error) {
+    console.log('5 error')
+  }
+
 }
 
 module.exports = router;
