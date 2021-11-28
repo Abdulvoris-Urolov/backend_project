@@ -17,6 +17,7 @@ const userSchema= new mongoose.Schema({
   },
   userName:{
     type: String,
+    lowercase: true,
     required: true,
     trim: true,
     unique: true,
@@ -25,6 +26,7 @@ const userSchema= new mongoose.Schema({
   },
   email:{
     type: String,
+    lowercase: true,
     required: true,
     trim: true,
     unique: true,
@@ -35,17 +37,18 @@ const userSchema= new mongoose.Schema({
     minlength: 4,
     required: true
   },
-  // role: {
-  //   type: String,
-  //   enum: ['user', 'admin'],
-  //   default: 'admin'
-  // },
-  // timestamps: true
+  role: {
+    type: String,
+    enum: ['user', 'admin'],
+    required: true,
+    default: 'admin'
+  }},
+  {
+    timestamps: { createdAt: 'created_at' }
+  }
   
-});
+);
 
-
-// let 
 
 const User = mongoose.model("User", userSchema);
 
