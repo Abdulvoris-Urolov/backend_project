@@ -1,12 +1,19 @@
 const express = require("express");
 const app = express();
-const auth = require('./src/routes/auth');
+const signup = require('./src/routes/auth');
 const signin = require('./src/routes/auth');
 require("./src/database/db")();
+require("dotenv").config();
+// const config = require('config');
+
+// if (!config.get('jwtPrivateKey')) {
+//   console.error('jwt muhit aniqlanmagan');
+//   process.exit(1);
+// }
 
 app.use(express.json());
-app.use('/api', auth );
-app.use('/api', signin)
+app.use('/api', signup);
+app.use('/api', signin);
 
 app.get('/', (req, res) =>{
   res.send('Backend_Project connected!');

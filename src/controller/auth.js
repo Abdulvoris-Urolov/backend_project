@@ -1,8 +1,7 @@
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
-const jwt = require("jsonwebtoken");
 const { User } = require("../models/auth");
-
+// signup
 const signup = async (req, res) => {
   // validatsiya qilish
   const { error } = validateUser(req.body);
@@ -45,15 +44,13 @@ const signup = async (req, res) => {
     ]);
     const salt = await bcrypt.genSalt();
     list.password = await bcrypt.hash(list.password, salt);
-    // token berish
     try {
-      const token = jwt.sign({ _id: newUser._id }, "kalit");
       //  destructuring assignment
       let { userName, email } = list;
       // saqlash
       await list.save();
       // Va qaytarib berish
-      res.header("x-auth-token", token).send({ userName, email });
+      res.send({ userName, email });
     } catch (error) {
       console.error(error.message);
       console.error("5 xato");
@@ -64,38 +61,6 @@ const signup = async (req, res) => {
   }
 };
 
-// // // signin
-// async function signin(req, res) {
-//   try {
-//     console.log('mana ishlayabdi');
-//     const { error } = validate(req.body);
-//     if (error)
-//       return res.status(400).send(error.details[0].message);
-
-//     let user = await User.findOne({ email: req.body.email });
-//     if (!user)
-//       return res.status(400).send('Email yoki parol xato');
-
-//     const isValidPassword = await bcrypt.compare(req.body.password, User.password);
-//     if (!isValidPassword)
-//       return res.status(400).send('Email yoki parol xato0');
-
-//     const token = user.generateAuthToken();
-//     res.header('x-auth-token', token).send(true);
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
-  
-//   function validate(req) {
-//       const schema = Joi.object({
-//         email: Joi.string().min(5).max(255).required().email(),
-//         password: Joi.string().min(5).max(255).required()
-//       });
-    
-//       return schema.validate(req);
-//     }
-// // signup
 function validateUser(user) {
   try {
     const userSchema = Joi.object({
@@ -105,13 +70,12 @@ function validateUser(user) {
       email: Joi.string().required().email(),
       password: Joi.string().min(4).required(),
       // role: Joi.string().boolean().required(),
-      // timestamps: Joi.boolean().required()
+      // timestamps: Joi.boolean().required(),
     });
     return userSchema.validate(user);
   } catch (error) {
     console.log("5 error");
   }
 }
-// TODO sdadadfasfsf
+
 module.exports = signup;
-// module.exports = signin;
