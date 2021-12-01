@@ -1,8 +1,7 @@
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
-const {User} = require("../models/auth");
+const { User } = require("../models/auth");
 const jwt = require("jsonwebtoken");
-const config = require('config');
 // signin
 const signin = async (req, res) => {
   try {
@@ -12,19 +11,29 @@ const signin = async (req, res) => {
     if (error) return res.status(400).send(error.message);
     // emailni tekshirish
     let user = await User.findOne({ email: req.body.email });
-    if (!user) return res.status(400).send("Email xato!!!");
-    // hash passni tekshirish
-    const validPassword = await bcrypt.compare(
-      req.body.password,
-      user.password
-    );
-    if (!validPassword) {
-      return res.status(400).send("Parol xato!!!");
+    if (!user) {
+      return res.status(400).send("Email xato!!!")
+    }else{
+      let password = await user.authentification (
+        req.body.password
+      )
+  
+      console.log(`${password} password`);
+      console.log(`${user.password} chiqdi`);
+      if (!password) {
+        return res.status(400).send("Parol xato!!!");
+      }
+      const token = jwt.sign({ _id: user._id }, process.env.SECRET, { expiresIn: `1h` });
+      res.header('authorization', token).send("Salom Xush kelibsiz");
     }
+    // hash passni tekshirish
+   
+ 
+
+
     // token berish
     // const token = user.generateAuthToken();
-    const token = jwt.sign({ _id: user._id }, process.env.SECRET, { expiresIn: `1h` });
-    res.header('authorization', token).send("Salom Xush kelibsiz");
+
   } catch (error) {
     console.log(error);
   }

@@ -5,63 +5,42 @@ const { User } = require("../models/auth");
 const signup = async (req, res) => {
   // validatsiya qilish
   const { error } = validateUser(req.body);
-
-  try {
     if (error) {
       return res.status(404).send(error.message);
     }
-  } catch (error) {
-    console.error("1 error");
-  }
   // email boyicha tekshirish
-  try {
     let user = await User.findOne({ email: req.body.email });
     if (user) return res.status(400).send("Bu email oldin ro`yxatdan o`tgan");
-  } catch (error) {
-    console.error("2 error");
-  }
   // yangi user qoshish
-  try {
-    newUser = new User({
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      userName: req.body.userName,
-      email: req.body.email,
-      password: req.body.password,
+  // passwordni 
+    let {
+      firstName,
+      lastName,
+      email,
+      password,
+      role
+    } = req.body
+
+    let hash_password =await bcrypt.hash(password, 10)
+
+    let  newUser = new User({
+      firstName,
+      lastName,
+      email,
+      hash_password,
+      role
     });
-  } catch (error) {
-    console.error("3 error");
-  }
+    newUser.save((error, data) =>{
+      if(error){
+        console.log(error);
+        return res.status(400).json({message: "User saqlanmadi"})
+      }
+  
+      if(data){
+        return res.status(201).json({message: "user saqlandi"})
+      }
+    })}
 
-  // passwordni hash lash
-  try {
-    let list = new User(req.body, [
-      "firstName",
-      "lastName",
-      "userName",
-      "email",
-      "password",
-    ]);
-
-      const salt = await bcrypt.genSalt();
-      list.password = await bcrypt.hash(list.password, salt);
-
-    try {
-      //  destructuring assignment
-      let { userName, email } = list;
-      // saqlash
-      await list.save();
-      // Va qaytarib berish
-      res.send({ userName, email });
-    } catch (error) {
-      console.error(error.message);
-      console.error("5 xato");
-    }
-  } catch (error) {
-    console.error(error.message);
-    console.error("4 xato");
-  }
-};
 
 function validateUser(user) {
   try {
