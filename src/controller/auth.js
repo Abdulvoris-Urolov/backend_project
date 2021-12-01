@@ -42,8 +42,10 @@ const signup = async (req, res) => {
       "email",
       "password",
     ]);
-    const salt = await bcrypt.genSalt();
-    list.password = await bcrypt.hash(list.password, salt);
+
+      const salt = await bcrypt.genSalt();
+      list.password = await bcrypt.hash(list.password, salt);
+
     try {
       //  destructuring assignment
       let { userName, email } = list;

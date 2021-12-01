@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
-const { User } = require("../models/auth");
+const {User} = require("../models/auth");
 const jwt = require("jsonwebtoken");
 const config = require('config');
 // signin
@@ -23,7 +23,7 @@ const signin = async (req, res) => {
     }
     // token berish
     // const token = user.generateAuthToken();
-    const token = jwt.sign({ _id: user._id }, process.env.SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ _id: user._id }, process.env.SECRET, { expiresIn: `1h` });
     res.header('authorization', token).send("Salom Xush kelibsiz");
   } catch (error) {
     console.log(error);
