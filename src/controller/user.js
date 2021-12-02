@@ -1,51 +1,62 @@
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
 const { User } = require("../models/auth");
-const jwt = require("jsonwebtoken");
-// signin
-const signin = async (req, res) => {
-  try {
-    console.log("Mana ishlayabdi");
-    // validatsiya qilish
-    const { error } = validate(req.body);
-    if (error) return res.status(400).send(error.message);
-    // emailni tekshirish
-    let user = await User.findOne({ email: req.body.email });
-    if (!user) {
-      return res.status(400).send("Email xato!!!")
-    }else{
-      let password = await user.authentification (
-        req.body.password
-      )
-  
-      console.log(`${password} password`);
-      console.log(`${user.password} chiqdi`);
-      if (!password) {
-        return res.status(400).send("Parol xato!!!");
-      }
-      const token = jwt.sign({ _id: user._id }, process.env.SECRET, { expiresIn: `1h` });
-      res.header('authorization', token).send("Salom Xush kelibsiz");
+// signup
+const signup = async (req, res) => {
+  // validatsiya qilish
+  const { error } = validateUser(req.body);
+    if (error) {
+      return res.status(404).send(error.message);
     }
-    // hash passni tekshirish
-   
- 
+  // email boyicha tekshirish
+    let user = await User.findOne({ email: req.body.email });
+    if (user) return res.status(400).send("Bu email oldin ro`yxatdan o`tgan");
+  // yangi user qoshish
+  // passwordni 
+    let {
+      firstName,
+      lastName,
+      email,
+      password,
+      role
+    } = req.body
+
+    let hash_password =await bcrypt.hash(password, 10)
+
+    let  newUser = new User({
+      firstName,
+      lastName,
+      email,
+      hash_password,
+      role
+    });
+    newUser.save((error, data) =>{
+      if(error){
+        console.log(error);
+        return res.status(400).json({message: "User saqlanmadi"})
+      }
+  
+      if(data){
+        return res.status(201).json({message: "user saqlandi"})
+      }
+    })}
 
 
-    // token berish
-    // const token = user.generateAuthToken();
-
+function validateUser(user) {
+  try {
+    const userSchema = Joi.object({
+      firstName: Joi.string().min(3).max(20).required(),
+      lastName: Joi.string().min(3).max(20).required(),
+      userName: Joi.string().required(),
+      email: Joi.string().required().email(),
+      password: Joi.string().min(4).required(),
+      // role: Joi.string().boolean().required(),
+      // timestamps: Joi.boolean().required(),
+    });
+    return userSchema.validate(user);
   } catch (error) {
-    console.log(error);
+    console.log("5 error");
   }
 }
 
-function validate(req) {
-  const schema = Joi.object({
-    email: Joi.string().min(5).max(255).required().email(),
-    password: Joi.string().min(5).max(255).required(),
-  });
-
-  return schema.validate(req);
-}
-
-module.exports = signin;
+module.exports = signup;
