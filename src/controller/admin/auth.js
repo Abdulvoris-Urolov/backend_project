@@ -1,6 +1,6 @@
 // const bcrypt = require("bcrypt");
 const Joi = require("joi");
-const { User } = require("../models/auth");
+const { User } = require("../../models/auth");
 const jwt = require("jsonwebtoken");
 // signin
 const signin = async (req, res) => {
@@ -17,13 +17,23 @@ const signin = async (req, res) => {
       let password = await user.authentification (
         req.body.password
       )
-  
       console.log(`${password} password`);
       console.log(`${user.password} chiqdi`);
       if (!password) {
         return res.status(400).send("Parol xato!!!");
       }
+
+      let role = await user.authentification (
+        req.body.role
+      )
+      console.log(`${role} role`);
+      console.log(`${user.role} chiqdi`);
+      if (!role) {
+        return res.status(400).send("role xato!!!");
+      }
       
+
+
       const token = jwt.sign({ _id: user._id }, process.env.SECRET, { expiresIn: `1h` });
       res.header('authorization', token).send("Salom Xush kelibsiz");
     }
