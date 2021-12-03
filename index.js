@@ -2,7 +2,6 @@ const express = require("express");
 const app = express();
 const signup = require('./src/routes/auth');
 const signin = require('./src/routes/auth');
-// const admin = require('./src/routes/admin/auth');
 require("./src/database/db")();
 require("dotenv").config();
 // const config = require('config');
@@ -15,7 +14,6 @@ require("dotenv").config();
 app.use(express.json());
 app.use('/api', signup);
 app.use('/api', signin);
-//
 
 app.get('/', (req, res) =>{
   res.send('Backend_Project connected!');
