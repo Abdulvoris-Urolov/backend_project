@@ -1,16 +1,10 @@
-const express = require("express");
+const express = require('express');
 const app = express();
 const router = require('./src/routes/auth');
 const routerAdmin = require('./src/routes/admin/auth');
 const routerCategory = require('./src/routes/category');
-require("./src/database/db")();
-require("dotenv").config();
-// const config = require('config');
-
-// if (!config.get('jwtPrivateKey')) {
-//   console.error('jwt muhit aniqlanmagan');
-//   process.exit(1);
-// }
+require('./src/database/db')();
+require('dotenv').config();
 
 app.use(express.json());
 app.use('/api', router);

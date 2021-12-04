@@ -1,9 +1,9 @@
-const { Category } = require('../models/category');
+// const { Category } = require('../models/category');
 
 const category =('/category', async (res, req) => {
 
 });
 
-module.exports = {
+module.exports={
   category: category,
 }
