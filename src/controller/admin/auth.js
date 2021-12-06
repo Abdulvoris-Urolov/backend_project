@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
-const { User } = require("../models/auth");
+const { User } = require("../../models/auth");
 const jwt = require("jsonwebtoken");
 // signup
 const signup = async (req, res) => {
@@ -11,7 +11,8 @@ const signup = async (req, res) => {
   }
   // email boyicha tekshirish
   let user = await User.findOne({ email: req.body.email });
-  if (user) return res.status(400).send("Bu email oldin ro`yxatdan o`tgan");
+  if (user) return res.status(400).send("Bu admin oldin ro`yxatdan o`tgan");
+
   // destructing assigment
   let { firstName, lastName, email, password, role } = req.body;
   // passwordni hashlash
@@ -35,36 +36,9 @@ const signup = async (req, res) => {
   });
 };
 
-function validateUser(user) {
-  try {
-    const userSchema = Joi.object({
-      firstName: Joi.string().min(3).max(20).required(),
-      lastName: Joi.string().min(3).max(20).required(),
-      userName: Joi.string().required(),
-      email: Joi.string().required().email(),
-      password: Joi.string().min(4).required(),
-    });
-    return userSchema.validate(user);
-  } catch (error) {
-    console.log("5 error");
-  }
-}
-// signin
-
-const requireSignin = (req, res, next) => {
-
-  if(req.header.authorization){
-    const token = req.authorization.split(" ")[1];
-    const user = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = user;
-    next();
-  }
-  console.log("signin");
-  return res.status(400).json({ message: 'Authorization required'});
-}
-
 const signin = async (req, res) => {
   try {
+    console.log("Mana ishlayabdi");
     // validatsiya qilish
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.message);
@@ -74,7 +48,6 @@ const signin = async (req, res) => {
       return res.status(400).send("Email xato!!!");
     } else {
       let password = await user.authentification(req.body.password);
-
       console.log(`${password} password`);
       console.log(`${user.password} chiqdi`);
       if (!password) {
@@ -94,11 +67,26 @@ function validate(req) {
   const schema = Joi.object({
     email: Joi.string().min(5).max(255).required().email(),
     password: Joi.string().min(5).max(255).required(),
+    role: Joi.string().required(),
   });
 
   return schema.validate(req);
 }
 
+function validateUser(user) {
+  try {
+    const userSchema = Joi.object({
+      firstName: Joi.string().min(3).max(20).required(),
+      lastName: Joi.string().min(3).max(20).required(),
+      userName: Joi.string().required(),
+      email: Joi.string().required().email(),
+      password: Joi.string().min(4).required(),
+    });
+    return userSchema.validate(user);
+  } catch (error) {
+    console.log("5 error");
+  }
+}
 
 module.exports = {
   signup: signup,
