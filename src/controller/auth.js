@@ -51,18 +51,6 @@ function validateUser(user) {
 }
 // signin
 
-const requireSignin = (req, res, next) => {
-
-  if(req.header.authorization){
-    const token = req.authorization.split(" ")[1];
-    const user = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = user;
-    next();
-  }
-  console.log("signin");
-  return res.status(400).json({ message: 'Authorization required'});
-}
-
 const signin = async (req, res) => {
   try {
     // validatsiya qilish

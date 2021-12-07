@@ -38,7 +38,6 @@ const signup = async (req, res) => {
 
 const signin = async (req, res) => {
   try {
-    console.log("Mana ishlayabdi");
     // validatsiya qilish
     const { error } = validate(req.body);
     if (error) return res.status(400).send(error.message);
@@ -53,7 +52,7 @@ const signin = async (req, res) => {
       if (!password) {
         return res.status(400).send("Parol xato!!!");
       }
-      const token = jwt.sign({ _id: user._id }, process.env.SECRET, {
+      const token = jwt.sign({ _id: user._id, role: user.role }, process.env.SECRET, {
         expiresIn: `1h`,
       });
       res.status(200).header("authorization", token).json({ token, user });
