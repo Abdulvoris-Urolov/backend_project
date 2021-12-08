@@ -13,8 +13,7 @@ const categorySchema = new mongoose.Schema(
       unique: true
     },
     parentId: {
-      type: String,
-
+      type: String
     },
   },
   {
