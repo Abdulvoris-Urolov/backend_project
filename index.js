@@ -4,6 +4,7 @@ const router = require("./src/routes/auth");
 const routerAdmin = require("./src/routes/admin/auth");
 const routerCategory = require("./src/routes/category");
 const routerProduct = require("./src/routes/product");
+const routerCart = require("./src/routes/cart");
 require("./src/database/db")();
 require("dotenv").config();
 
@@ -12,6 +13,7 @@ app.use("/api", router);
 app.use("/api", routerAdmin);
 app.use("/api", routerCategory);
 app.use("/api", routerProduct);
+app.use("/api", routerCart);
 
 app.get("/", (req, res) => {
   res.send("Backend_Project connected!");
