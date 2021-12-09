@@ -23,7 +23,7 @@ function createCategory(categories, parentId = null) {
   return categoryList;
 };
 
-const postcategory = (req, res) => {
+const postCategory = (req, res) => {
   const categoryObj = {
     name: req.body.name,
     slug: slugify(req.body.name),
@@ -56,6 +56,6 @@ const getCategory = (req, res) => {
 }
 
 module.exports = {
-    postcategory: postcategory,
+    postcategory: postCategory,
     getCategory: getCategory,
 };

@@ -1,0 +1,135 @@
+# Plans
+
+### project initialize (requirements)
+
+- [x]  gitda repo ochish
+- [x]  mongodb kompyuterga òrnatish yoki mongodb.com dan ro\`yxatdan o\`tib cluster ochish
+- [x]  nodejs project initialize qilish
+- [x]  nodemonda start qilish
+- [x]  mongodb da db (e-commerce) yaratish va nodejs ga ulash (.env faylni ham tanishib chiqish) 
+- [x]  postman ni o'rnatish
+- [x]  screen qilib yuborish yoki o`shalarni bajarilganini video qilib yuborish
+- [x]  Hammasini yaxshilab tekshirish
+
+### Sprint 1
+# Authentification and Autherization
+### **Day one**
+- [x] **1. Configuration**
+- [x] kerakli package larni o'rnatish va o'rganib chiqish.
+    - [ ] express, express-validator, mongoose
+    - [ ] dotenv, body-parser
+  - [x] `controller`, `models`, `routes` papkalar yaratish
+- [x] **Routerlar**
+  - [x] /api/admin/signup, /api/admin/signin
+  - [x] `signin` va `signup` (post metod) routerlar yaratish [src/routes/auth.js] (ichiga hech narsa yozmay turish kerak)
+  - [x] `auth.js` dagi routerni `index.js` ga chaqirish `app.use('api', userRoutes)`
+---------------------
+- [x] **2. Schema yaratish**
+  - [x] `userSchema` yaratish [src/models/auth.js]
+  - [x] **maydonlar**
+    - [x] firstName - String, required, trim, min=3, max=10
+    - [x] lastName - String, required, trim, min=3, max=20
+    - [x] userName - String, required, trim, unique, index, lowercase
+    - [x] email - String, required, trim, unique, lowecase
+    - [x] hash_password- String, required
+    - [x] role - String, enum: ['user, admin], default-admin
+    - [x] timestamp 
+---------------------
+- [x] **3. Passwordni sozlash**
+  - [x] bcrypt (package) ni o'rganib chiqish
+  - [x] virtual funksiyani o'rganib chiqish(mongoose)
+  - [x] virtual function orqali `hash_password` yaratish 
+  - [x] `userSchema` da `authenticate` metod yaratish(tizimga kirishda kiritilgan password bilan bazadagi passwordni hashlab taqqoslash)
+---------------------
+- [x] **4. signup metodni sozlash**
+  - [x] modeldan user ni chaqirib olish
+  - [x] mongoose dan `findOne` metodni o'rganib chiqish
+  - [x] User modeldan `findOne` (metoddan) email orqali bazadagi user tekshiriladi   
+    - [x] agar topilsa `Already registered`
+    - [x] destructuring assignment haqida o'qish 
+    - [x] body dan kerakli field lar olinadi 
+    - [x] yangi o'zgaruvchiga `User` dan instance olib ichiga olgingan fieldlarni beramiz (yangi object yasaladi)
+    - [x] instance olganda undagi hamma metodlar ham olinadi, yangi objectni `save` degan metodini chaqiramiz
+    - [x] `(error, data)` parametrlar beriladi, agar error bo'lsa `error` bervoriladi
+    - [x] `error` bo'lmasa `data`, `response` da qaytariladi
+    - [x] 2 ta `admin` yaratib olgandan keyin, `role` ni default qiymatini `user` ga almashtiriladi 
+    - [x] 2ta `user` yaratiladi va mongo da user larni borligiga ishonch hosil qilinadi
+    - [x] signup metodini [src/controller/auth.js] ga o'tkaziladi(**export** va **import**)
+    - [x] [src/routes/index.js] da signup metodni chaqirib qo'yamiz
+
+### **Day two**
+- [x] **1. Login**
+  - [x] [src/controller/auth.js] da `signin` nomli metod yaratiladi
+  - [x] `userSchema` da virtual funksiya yaratiladi, `fullName` degan parametr qabul qilib, `firstName` va `lastName` qo'shib qaytariladi
+  - [x] Diqqatni jamlab jwt hadida o'qib chiqish kerak
+    -  [npmjs.com/jwt](https://www.npmjs.com/package/jsonwebtoken) 
+    -  [jwt](https://jwt.io/)
+    -  [Farhod aka](https://www.youtube.com/watch?v=YU9Pama9xA4&ab_channel=FarkhodDadajanov) videolarni hammasini e\`tibor bilan ko\`rib yana qo\`shimcha videolardan izlanib yaxshiroq tushinish kerak 
+    -  [uzbekcoders](https://community.uzbekcoders.uz/post/jwt-nima-va-u-nega-kerak-60029bd7fe1c9b245345e10f)
+  - [x] .env faylga JWT_SECRET yaratiladi va qiymat beriladi
+  - [x] `User` schemani `findOne` metodi parametriga so'rovdan kelgan email beriladi(bazada shunday user borligini tekshirish uchun)
+    - [x] error bo'lsa error chiqariladi
+    - [x] agar `user` mavjud bo'lsa 
+      - [x] `user` schemadaga `authentificate` degan metodni chaqiriladi, qiymat sifatida req.body.password beriladi.
+      - [ ] bitta o'zgaruvchiga token tayinlanadi
+      - [ ] **token olish**
+      - [ ] jwt.signin metodiga 
+        - [ ] id ga userdagi id
+        - [ ] jwt secret
+        - [ ] express in = 1h (ko\`proq qilinsa ko\`proq vaqt ga yetadi va kod yozayotganda asabni buzmaydi lekin oxirida vaqtni qo\`yayotganda ahamiyat bilan qo\`yish kerak)
+      - [ ] userni ichidagi passworddan boshqa qiymatlar olinadi
+      - [ ] token va user qaytariladi (postmanda chiqishi kerak sinab ko\`rganda)
+      - [x] agar `password` berilmasa invalid password msg yuboriladi
+    - [x] aks holda Error msg yuboriladi
+  - [x] routes da signin chaqirib postmanda test qilinadi
+  ------------------------
+
+- [x] **2. Middleware for signin**
+  - [x] `controller` va `routes` papkada admin papka yaratib auth.js fayllarni papkalarga mos ravishda nusxalaymiz 
+  - [x] [routes/admin/auth.js] da route o'zgaradi `/admin/signup`, `/admin/signup`
+  - [x] [Middleware](https://www.youtube.com/watch?v=H1NGDp5BsII&ab_channel=FarkhodDadajanov)
+  - [x] [Middleware](https://mohirdev.uz/courses/node-js-noldan-boshlab-professionalgacha/lesson/3-express-js-darslari-json-response-va-middlewarelar-haqida/) Yana qo\`shimcha izlanish va yaxshilab tushinish juda zarur ma\`lumotlar
+  - [x] [src/controller/admin/auth.js] signup da userda `role: 'admin'` qo'shiladi
+  - [x] signin metodda user.authentificate() va user ni role `admin` likka ham tekshiriladi
+  - [x] `index.js` da `./routes/admin/auth` chaqiriladi
+  - [x] [/src/controller/admin/auth.js] da `requireSignIn` metod yaratiladi
+    -  token ni olish: `req.headers.authorization.split[(" ")[1]`
+    -  user ga `jwt.verify(token, .env da JWT_SECRET)` solishitiriladi
+    -  `req.user = user`
+    -  `next();`  
+---------------------
+### Day three
+## **Category**
+- [x] **1. Category**
+  - [x] `category` yaratish [src/models/category.js]
+  - [x] **maydonlar**
+    - [x] name - String, required, trim,
+    - [x] slug - String, required, trim, min=3, max=20
+    - [x] parentId - String, required, trim, unique, index, lowercase
+    - [x] timestamp 
+-----------------------------------
+- [x] **2. Login**
+  - [x] [src/controller/category.js] da `signin` nomli metod yaratiladi
+  - [x] `categorySchema` da virtual funksiya yaratiladi, `fullName` degan parametr qabul qilib, `firstName` va `lastName` qo'shib qaytariladi
+  - [x] **jwt** hadida o'qib chiqish kerak 
+    -  [npmjs.com/jwt](https://www.npmjs.com/package/jsonwebtoken) 
+    -  [jwt](https://jwt.io/)
+    -  [Farhod aka](https://www.youtube.com/watch?v=YU9Pama9xA4&ab_channel=FarkhodDadajanov)
+    -  [uzbekcoders](https://community.uzbekcoders.uz/post/jwt-nima-va-u-nega-kerak-60029bd7fe1c9b245345e10f)
+  - [x] .env faylga JWT_SECRET yaratiladi va qiymat beriladi
+  - [x] `User` schemani `findOne` metodi parametriga so'rovdan kelgan email beriladi(bazada shunday user borligini tekshirish uchun)
+    - [x] error bo'lsa error chiqariladi
+    - [x] agar `user` mavjud bo'lsa 
+      - [x] `user` schemadaga authenticate degan metodni chaqiriladi, qiymat sifatida req.body.password beriladi.
+      - [ ] bitta o'zgaruvchiga token tayinlanadi
+      - [ ] **token olish**
+      - [ ] jwt.signin metodiga 
+        - [ ] id ga userdagi id
+        - [ ] jwt secret
+        - [ ] experis in = 1h
+      - [ ] userni ichidagi passworddan boshqa qiymatlar olinadi
+      - [ ] token va user qaytariladi
+      - [x] agar `password` berilmasa invalid password msg yuboriladi
+    - [x] aks holda Error msg yuboriladi
+  - [x] routes da signin chaqirib postmanda test qilinadi
+  ------------------------
