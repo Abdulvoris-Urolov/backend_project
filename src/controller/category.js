@@ -24,10 +24,16 @@ function createCategory(categories, parentId = null) {
 };
 
 const postcategory = (req, res) => {
+
   const categoryObj = {
     name: req.body.name,
     slug: slugify(req.body.name),
+
   };
+
+  if(req.file){
+    categoryObj.categoryImage = process.env.MONGODB_URL + '/public/' + req.file.filename;
+  }
 
   if (req.body.parentId) {
     categoryObj.parentId = req.body.parentId;
