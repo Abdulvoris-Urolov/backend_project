@@ -32,7 +32,7 @@ const postcategory = (req, res) => {
   };
 
   if(req.file){
-    categoryObj.categoryImage = process.env.MONGODB_URL + '/public/' + req.file.filename;
+    categoryObj.categoryImage = process.env.API + '/public/' + req.file.filename;
   }
 
   if (req.body.parentId) {
