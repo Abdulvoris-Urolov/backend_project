@@ -69,7 +69,7 @@ const signin = async (req, res) => {
       if (!password) {
         return res.status(400).send("Parol xato!!!");
       }
-      const token = jwt.sign({ _id: user._id }, process.env.SECRET, {
+      const token = jwt.sign({ _id: user._id, role: user.role }, process.env.SECRET, {
         expiresIn: `1d`,
       });
       res.status(200).header("authorization", token).json({ token, user });
