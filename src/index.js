@@ -1,10 +1,10 @@
 const express = require("express");
 const app = express();
-const router = require("./src/routes/auth");
-const routerAdmin = require("./src/routes/admin/auth");
-const routerCategory = require("./src/routes/category");
-const routerProduct = require("./src/routes/product");
-require("./src/database/db")();
+const router = require("./routes/auth");
+const routerAdmin = require("./routes/admin/auth");
+const routerCategory = require("./routes/category");
+const routerProduct = require("./routes/product");
+require("./database/db")();
 require("dotenv").config();
 
 app.use(express.json());

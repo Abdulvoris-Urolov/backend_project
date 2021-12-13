@@ -9,7 +9,7 @@ const signup = async (req, res) => {
   if (error) {
     return res.status(404).send(error.message);
   }
-  // email boyicha tekshirish
+  // email bo`yicha tekshirish
   let user = await User.findOne({ email: req.body.email });
   if (user) return res.status(400).send("Bu email oldin ro`yxatdan o`tgan");
   // destructing assigment

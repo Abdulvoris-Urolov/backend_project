@@ -36,6 +36,21 @@ const signup = async (req, res) => {
   });
 };
 
+function validateUser(user) {
+  try {
+    const userSchema = Joi.object({
+      firstName: Joi.string().min(3).max(20).required(),
+      lastName: Joi.string().min(3).max(20).required(),
+      userName: Joi.string().required(),
+      email: Joi.string().required().email(),
+      password: Joi.string().min(4).required(),
+    });
+    return userSchema.validate(user);
+  } catch (error) {
+    console.log("5 error");
+  }
+}
+
 const signin = async (req, res) => {
   try {
     // validatsiya qilish
@@ -72,22 +87,16 @@ function validate(req) {
   return schema.validate(req);
 }
 
-function validateUser(user) {
-  try {
-    const userSchema = Joi.object({
-      firstName: Joi.string().min(3).max(20).required(),
-      lastName: Joi.string().min(3).max(20).required(),
-      userName: Joi.string().required(),
-      email: Joi.string().required().email(),
-      password: Joi.string().min(4).required(),
-    });
-    return userSchema.validate(user);
-  } catch (error) {
-    console.log("5 error");
-  }
+const signout = (req, res) => {
+
+  res.clearCookie('token');
+  res.status(200).json({message: 'signout success'})
+
 }
+
 
 module.exports = {
   signup: signup,
   signin: signin,
+  signout: signout,
 };
