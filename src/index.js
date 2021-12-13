@@ -1,12 +1,12 @@
 const express = require("express");
 const app = express();
-const router = require("./src/routes/auth");
-const routerAdmin = require("./src/routes/admin/auth");
-const routerCategory = require("./src/routes/category");
-const routerProduct = require("./src/routes/product");
-const routerCart = require("./src/routes/cart");
+const router = require("./routes/auth");
+const routerAdmin = require("./routes/admin/auth");
+const routerCategory = require("./routes/category");
+const routerProduct = require("./routes/product");
+const routerCart = require("./routes/cart");
 const path = require("path");
-require("./src/database/db")();
+require("./database/db")();
 require("dotenv").config();
 
 app.use(express.json());

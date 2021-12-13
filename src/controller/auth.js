@@ -9,14 +9,14 @@ const signup = async (req, res) => {
   if (error) {
     return res.status(404).send(error.message);
   }
-  // email boyicha tekshirish
+  // email bo`yicha tekshirish
   let user = await User.findOne({ email: req.body.email });
   if (user) return res.status(400).send("Bu email oldin ro`yxatdan o`tgan");
   // destructing assigment
   let { firstName, lastName, email, password, role } = req.body;
   // passwordni hashlash
   let hash_password = await bcrypt.hash(password, 10);
-  // yangi user qoshish
+  // yangi user qo`shish
   let newUser = new User({
     firstName,
     lastName,
@@ -24,6 +24,7 @@ const signup = async (req, res) => {
     hash_password,
     role,
   });
+// yangi userni saqlash
   newUser.save((error, data) => {
     if (error) {
       console.log(error);
@@ -34,7 +35,7 @@ const signup = async (req, res) => {
     }
   });
 };
-
+// qo`shilmoqchi bo`lgan yuzerni validatsiya qilish ya`ni tekshirish
 function validateUser(user) {
   try {
     const userSchema = Joi.object({
