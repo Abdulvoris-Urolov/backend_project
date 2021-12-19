@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const Joi = require("joi");
 const { User } = require("../../models/auth");
 const jwt = require("jsonwebtoken");
+const shortid = require("shortid")
 // signup
 const signup = async (req, res) => {
   // validatsiya qilish
@@ -23,7 +24,7 @@ const signup = async (req, res) => {
     lastName,
     email,
     hash_password,
-    userName: Math.random().toString(),
+    userName: shortid.generate(),
     role,
   });
   newUser.save((error, data) => {
