@@ -16,22 +16,23 @@ const signup = async (req, res) => {
   // destructing assigment
   let { firstName, lastName, email, password, role } = req.body;
   // passwordni hashlash
-  let hash_password = await bcrypt.hash(password, 10);
-  // yangi user qoshish
+  const hash_password = await bcrypt.hash(password, 10);
+  // yangi user qo`shish
   let newUser = new User({
     firstName,
     lastName,
     email,
     hash_password,
+    userName: Math.random().toString(),
     role,
   });
   newUser.save((error, data) => {
     if (error) {
       console.log(error);
-      return res.status(400).json({ message: "User saqlanmadi" });
+      return res.status(400).json({ message: "Admin saqlanmadi" });
     }
     if (data) {
-      return res.status(201).json({ message: "User saqlandi" });
+      return res.status(201).json({ message: "Admin saqlandi" });
     }
   });
 };

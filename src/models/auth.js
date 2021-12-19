@@ -51,18 +51,17 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-userSchema.virtual("password").set((password) => {
-  this.hash_password = bcrypt.hashSync(password, 10);
-});
+// userSchema.virtual("password").set((password) => {
+//   this.hash_password = bcrypt.hashSync(password, 10);
+// });
 
-userSchema.virtual("fullName")
-.get(function(){
+userSchema.virtual("fullName").get(function () {
   return `${this.firstName} ${this.lastName}`;
 });
 
 userSchema.methods = {
   authentification: async function (password) {
-    return await bcrypt.compareSync(password, this.hash_password);
+    return await bcrypt.compare(password, this.hash_password);
   },
 };
 
