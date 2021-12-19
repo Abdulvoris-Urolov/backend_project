@@ -23,5 +23,9 @@ const categorySchema = new mongoose.Schema(
     timestamps: { createdAt: "created_at" },
   }
 );
+// initialdata bunda nimaga iwlamadi?
+// const Category = mongoose.model("Category", categorySchema);
+// exports.Category = Category;
 
+// initialdata bunda nimaga iwladi?
 module.exports = mongoose.model("Category", categorySchema);
