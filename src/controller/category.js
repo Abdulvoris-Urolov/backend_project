@@ -79,7 +79,7 @@ const updateCategories = async (req, res) => {
     }
     return res.status(201).json({ updatedCategories });
   }else{
-    const categtory = {
+    const category = {
       name,
       type
     };
