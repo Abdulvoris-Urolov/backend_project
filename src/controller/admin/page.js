@@ -17,7 +17,8 @@ const createPage = (req, res) => {
 
   req.body.createdBy = req.user._id;
 
-  Page.findOne({ category: req.body.category }).exec((error, page) => {
+  Page.findOne({ category: req.body.category })
+  .exec((error, page) => {
     if (error) return res.status(400).json({ error });
     if (page) {
       Page.findOneAndUpdate({ category: req.body.category }, req.body).exec(

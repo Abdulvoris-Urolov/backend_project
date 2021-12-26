@@ -1,3 +1,5 @@
+
+  
 const mongoose = require('mongoose');
 const pageSchema = new mongoose.Schema({
     title: {
@@ -33,7 +35,10 @@ const pageSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     }
-}, { timestamps: true });
+},
+{
+    timestamps: { createdAt: "created_at" },
+});
 
 
 module.exports = mongoose.model('Page', pageSchema);
