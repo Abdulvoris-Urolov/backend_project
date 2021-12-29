@@ -10,6 +10,12 @@ const pageSchema = new mongoose.Schema({
     required: true,
     trim: true
   },
+  category: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Category',
+    required: true,
+    unique: true
+  },
   banners: [
     {
       img:{type:String},
@@ -22,11 +28,6 @@ const pageSchema = new mongoose.Schema({
       navigateTo: { type: String }
     }
   ],
-  category: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Category',
-    required: true
-  },
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
