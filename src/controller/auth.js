@@ -64,10 +64,8 @@ const signin = async (req, res) => {
     if (!user) {
       return res.status(400).send("Email xato!!!");
     } else {
-      let password = await user.authentification(req.body.password);
 
-      console.log(`${password} password`);
-      console.log(`${user.password} chiqdi`);
+      let password = await user.authentification(req.body.password);
       if (!password) {
         return res.status(400).send("Parol xato!!!");
       }
@@ -75,6 +73,7 @@ const signin = async (req, res) => {
       const {firstName, lastName, fullName, email, role} = user;
       res.status(200).json({ token, user:{firstName, lastName, fullName, email, role} });
     } 
+
   } catch (error) {
     console.log(error);
   }
