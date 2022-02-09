@@ -14,7 +14,7 @@ const routerProduct = require("./routes/product");
 const routerCart = require("./routes/cart");
 const routerInitialData = require("./routes/admin/initialData");
 const routerPageInitialData = require("./routes/admin/page");
-
+//oxirgi yozgan comment
 
 // app.use(cors())
 app.use(express.json());
